@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Account</h1>
+  <form action="{{ url_for('account') }}" method="post" enctype="multipart/form-data">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" value="{{ current_user.username }}" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{ current_user.email }}" required>
+
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" value="{{ current_user.first_name }}">
+
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" value="{{ current_user.last_name }}">
+
+    <label for="bio">Bio:</label>
+    <textarea id="bio" name="bio">{{ current_user.bio }}</textarea>
+
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" value="{{ current_user.location }}">
+
+    <label for="profession">Profession:</label>
+    <input type="text" id="profession" name="profession" value="{{ current_user.profession }}">
+
+    <label for="profile_picture">Profile Picture:</label>
+    <input type="file" id="profile_picture" name="profile_picture">
+    {% if current_user.profile_picture %}
+      <img src="{{ url_for('static', filename='users/uploaded_images/' + current_user.profile_picture) }}" alt="Profile Picture">
+    {% endif %}
+
+    <label for="new_password">New Password:</label>
+    <input type="password" id="new_password" name="new_password">
+
+    <input type="submit" value="Update Profile">
+  </form>
+{% endblock %}

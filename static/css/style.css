@@ -1,0 +1,114 @@
+/* CSS for the index.html page */
+
+/* Style for the header and welcome message */
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Style for the create post form */
+form {
+  margin-bottom: 20px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+}
+
+input[type="file"] {
+  margin-top: 10px;
+}
+
+input[type="submit"] {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+/* Style for individual posts */
+.post {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 0 auto; /* Center the posts on the page */
+  max-width: 50%; /* Limit the width to take up half of the page */
+  background-color: #f9f9f9; /* Background color for the posts */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+}
+
+.post-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.post p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.post img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  /* Set a fixed size for the images */
+  width: 200px;
+  height: 150px;
+  object-fit: cover; /* Maintain aspect ratio while filling the container */
+}
+
+/* Clear floats for post containers */
+/* This will ensure that each post is properly separated from the previous one */
+.post:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+/* style.css */
+
+/* Style for the "Create New Post" button */
+.btn-primary {
+  margin-bottom: 10px;
+}
+
+/* Style for the modal */
+.modal-dialog {
+  max-width: 500px; /* Set the maximum width of the modal */
+}
+
+.modal-title {
+  font-size: 24px;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 10px 20px;
+}
+
+/* Style for the form elements inside the modal */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+/* Remove margin/padding for the close button in the modal header */
+.modal-header .close {
+  margin: 0;
+  padding: 0;
+}
