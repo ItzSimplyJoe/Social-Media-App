@@ -35,78 +35,81 @@
     </div>
   </div>
 
+      {% for post in posts %}
+      <div class="post">
+        <p>{{ post.content }}</p>
+        {% if post.filename %}
+          <img src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image">
+        {% endif %}
   
-  {% for post in posts %}
-    <div class="post">
-      <p class="post-info">Posted by {{ post.author.username }} at {{ post.created_at }}</p>
-      <p>{{ post.content }}</p>
-      {% if post.filename %}
-        <img src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image">
-      {% endif %}
+        <!-- Display the number of likes as a font awesome icon -->
+        <p class="post-likes">
+          <i class="fas fa-heart {% if current_user.has_liked_post(post) %}liked{% endif %}" onclick="likePost({{ post.id }})" id="heartIcon{{ post.id }}"></i>
+          <span id="likeCount{{ post.id }}">{{ post.likes_count }}</span>
+        </p>
+        
+  
+        <!-- Font Awesome symbol for comments -->
+        <p class="post-comments" onclick="showComments({{ post.id }})">
+          <i class="fas fa-comment"></i> {{ post.comments | length }}
+        </p>
+        <p class="post-info">Posted by {{ post.author.username }} at {{ post.created_at }}</p>
 
-      <!-- Display the number of likes as a font awesome icon -->
-      <p class="post-likes">
-        <i class="fas fa-heart {% if current_user.has_liked_post(post) %}liked{% endif %}" onclick="likePost({{ post.id }})"></i>
-        <span id="likeCount{{ post.id }}">{{ post.likes_count }}</span>
-      </p>
-
-      <!-- Font Awesome symbol for comments -->
-      <p class="post-comments" onclick="showComments({{ post.id }})">
-        <i class="fas fa-comment"></i> {{ post.comments | length }}
-      </p>
-
-      <!-- Comments Modal -->
-      <div class="modal fade" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="commentsModalLabel">Comments</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <ul class="list-group">
-                {% for comment in post.comments %}
-                  <li class="list-group-item">
-                    <strong>{{ comment.author.username }}:</strong> {{ comment.content }}
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="modal-footer">
-              <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
-                <div class="form-group">
-                  <textarea name="content" class="form-control" placeholder="Write your comment here" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit Comment</button>
-              </form>
+        <!-- Comments Modal -->
+        <div class="modal fade" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="commentsModalLabel">Comments</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <ul class="list-group">
+                  {% for comment in post.comments %}
+                    <li class="list-group-item">
+                      <strong>{{ comment.author.username }}:</strong> {{ comment.content }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+                  <div class="form-group">
+                    <textarea name="content" class="form-control" placeholder="Write your comment here" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit Comment</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
+  
       </div>
-
   {% endfor %}
 
-<script>
-  function likePost(postId) {
-    fetch(`/like_post/${postId}`, { method: 'POST' })
-      .then((response) => response.json())
-      .then((data) => {
-        const likeCountSpan = document.getElementById(`likeCount${postId}`);
-        likeCountSpan.textContent = data.likes_count;
-        const likeIcon = document.querySelector(`#likeCount${postId} + i`);
-        if (data.liked) {
-          likeIcon.classList.add('liked');
-        } else {
-          likeIcon.classList.remove('liked');
-        }
-      });
-  }
-  function showComments(postId) {
-    $(`#commentsModal${postId}`).modal('show');
-  }
-
+  <script>
+    function likePost(postId) {
+      fetch(`/like_post/${postId}`, { method: 'POST' })
+        .then((response) => response.json())
+        .then((data) => {
+          const likeCountSpan = document.getElementById(`likeCount${postId}`);
+          likeCountSpan.textContent = data.likes_count;
+  
+          const heartIcon = document.getElementById(`heartIcon${postId}`);
+          if (data.liked) {
+            heartIcon.classList.add('liked'); // Add "liked" class if post is liked
+          } else {
+            heartIcon.classList.remove('liked'); // Remove "liked" class if post is unliked
+          }
+        });
+    }
+  
+    function showComments(postId) {
+      $(`#commentsModal${postId}`).modal('show');
+    }
   </script>
+  
 {% endblock %}
 

@@ -1,30 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Social Media App</title>
+    <title>Simplz</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/c76bc25f8c.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('account') }}">Account</a></li>
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% else %}
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('register') }}">Register</a></li>
-            {% endif %}
-        </ul>
+    <div class="stick">
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="/" id="navbar__logo"><img classname= "logo" src = "{{ url_for('static', filename='images/logo.png')}}" width="60">Simplz</a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item"><a class="navbar__links" href="{{ url_for('index') }}" title="Home"><i class="fa-solid fa-house"></i></a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="navbar__item"><a class="navbar__links" href="{{ url_for('account') }}" title = "Account Settings"><i class="fa-solid fa-user"></i></a></li>
+                    <li class="navbar__item"><a class="navbar__links" href="{{ url_for('messages') }}" title="Private Messages"><i class="fa-solid fa-envelope"></i></a></li>
+                    <li class="navbar__item"><a class="navbar__links" href="{{ url_for('logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                {% else %}
+                    <li class="navbar__item"><a class="navbar__links" href="{{ url_for('login') }}">Login</a></li>
+                    <li class="navbar__item"><a class="navbar__links" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
     <header>
         <form action="{{ url_for('search_user') }}" method="get">
             <input type="text" name="search_query" placeholder="Search for users...">
-            <button type="submit">Search</button>
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
     </header>
+    </div>
 
     <div class="content">
         {% block content %}
@@ -43,5 +56,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

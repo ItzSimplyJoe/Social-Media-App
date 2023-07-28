@@ -147,7 +147,6 @@ def allowed_file(filename):
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Use Session.get() instead of Query.get()
     return db.session.get(User, int(user_id))
 
 
@@ -380,6 +379,12 @@ def like_post(post_id):
     likes_count = post.likes_count
     response_data = {'likes_count': likes_count, 'liked': liked}
     return jsonify(response_data)
+
+@app.route('/messages')
+@login_required
+def messages():
+    print("Hello")
+    return render_template('messages.html')
 
 if __name__ == '__main__':
     with app.app_context():

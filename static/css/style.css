@@ -1,4 +1,315 @@
-/* CSS for the index.html page */
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.content{
+  background-color: #131313;
+}
+.stick{
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+/* ---------------------------------------- nav bar ----------------------------------------*/
+.navbar{
+  background: #131313;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top:0;
+  z-index: 999;
+  opacity: 1;
+}
+
+.navbar__container {
+  display: flex;
+  justify-content: space-between;
+  height: 80px;
+  z-index: 1;
+  width: 100%;
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 50px;
+}
+
+#navbar__logo {
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.logo {
+  margin-right: 2rem;
+}
+
+.navbar__menu{
+  display: flex;
+  align-items: center;
+  list-style: none;
+  text-align: center;
+}
+
+.navbar__item{
+  height: 80px;
+}
+
+.navbar__links{
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  transition: all 0.5s ease;
+}
+
+.navbar__links:hover{
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+@media screen and (max-width:960px){
+  .navbar__container{
+      display: flex;
+      justify-content: space-between;
+      height: 80px;
+      z-index: 1;
+      width: 100%;
+      max-width: 1300px;
+      padding: 0;
+  }
+  .navbar__menu{
+      display: grid;
+      grid-template-columns: auto;
+      margin: 0;
+      width: 100%;
+      position: absolute;
+      top: -1000px;
+      left: 0;
+      opacity: 0;
+      transition: all 0.5s ease;
+      height: 50vh;
+      z-index: -1;
+      background: #131313;
+  }
+  .navbar__menu.active{
+      background: #131313;
+      top: 80px;
+      opacity: 1;
+      transition: all 0.5s ease;
+      z-index: 99;
+      height: 50vh;
+      font-size: 1.6rem;
+  }
+  #navbar__logo{
+      padding-left: 25px;
+  }
+  .navbar__toggle .bar:nth-child(1){
+      width: 25px;
+      height: 3px;
+      margin: 5px auto;
+      transition: all 0.3s ease-in-out;
+      background: #fff;
+  }
+  .navbar__toggle .bar:nth-child(2){
+      width: 23px;
+      height: 3px;
+      margin: 5px auto;
+      transition: all 0.3s ease-in-out;
+      background: #fff;
+  }
+  .navbar__toggle .bar:nth-child(3){
+      width: 20px;
+      height: 3px;
+      margin: 5px auto;
+      transition: all 0.3s ease-in-out;
+      background: #fff;
+  }
+  
+  .navbar__item{
+      width: 100%;
+  }
+  .navbar__links{
+      text-align: center;
+      padding: 2rem;
+      width: 100%;
+      display: table;
+  }
+  
+  #mobile-menu{
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      transform: translate(5%, 20%);
+  }
+  .navbar__toggle .bar{
+      display: block;
+      cursor: pointer;
+      background-color: #fff;
+  }
+
+  #mobile-menu.is-active .bar:nth-child(2){
+      opacity: 0;
+  }
+  #mobile-menu.is-active .bar:nth-child(1){
+      transform: translateY(8px) rotate(45deg);
+      background-color: #7700ff;
+      width: 25px;
+
+  }
+  #mobile-menu.is-active .bar:nth-child(3){
+      transform: translateY(-8px) rotate(-45deg);
+      background-color: #7700ff;
+      width: 25px;
+  }
+}
+/* ---------------------------------------- Search Bar ----------------------------------------*/
+
+header{
+  background-color: #131313;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+header form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header form input{
+  width: 50%;
+  height: 40px;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  padding: 0 10px;
+  font-size: 1rem;
+}
+
+header form button{
+  width: 10%;
+  height: 40px;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  background-color: #7700ff;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+header form button:hover{
+  background-color: #9e4bfd;
+}
+
+/* ---------------------------------------- Posts ----------------------------------------*/
+/* .post {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 50%;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.post-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.post p {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.post img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+
+.post:after {
+  content: "";
+  display: table;
+  clear: both;
+} */
+
+.post{
+  width: 50%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #242424;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.post-info{
+  font-size: 12px;
+  color: #606060;
+  margin-bottom: 5px;
+}
+
+.post p{
+  margin: 0;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.post img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.post:after{
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.liked {
+  color: #7700ff;
+  animation: pulseAnimation 1s;
+}
+
+
+
 
 /* Style for the header and welcome message */
 h1 {
@@ -35,45 +346,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-/* Style for individual posts */
-.post {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 0 auto; /* Center the posts on the page */
-  max-width: 50%; /* Limit the width to take up half of the page */
-  background-color: #f9f9f9; /* Background color for the posts */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
-}
 
-.post-info {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.post p {
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.post img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin-top: 10px;
-  /* Set a fixed size for the images */
-  width: 200px;
-  height: 150px;
-  object-fit: cover; /* Maintain aspect ratio while filling the container */
-}
-
-/* Clear floats for post containers */
-/* This will ensure that each post is properly separated from the previous one */
-.post:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 /* style.css */
 
 /* Style for the "Create New Post" button */
@@ -112,3 +385,25 @@ label {
   margin: 0;
   padding: 0;
 }
+
+
+/* animations */
+
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.5);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
