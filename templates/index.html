@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Welcome, {{ current_user.username }}!</h1>
-  <h2>Recent Posts</h2>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPostModal">
-    Create New Post
+  <h1>Hello, {{ current_user.username }}!</h1>
+  <h2>Recent Posts:</h2>
+  <button type="button" title="New Post" class="newpost-button" data-toggle="modal" data-target="#createPostModal">
+    <i class="fa-solid fa-plus"></i>
   </button>
-  <div class="modal fade" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
+  <div class="modal fade dark-modal" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -35,28 +35,39 @@
     </div>
   </div>
 
-      {% for post in posts %}
-      <div class="post">
-        <p>{{ post.content }}</p>
-        {% if post.filename %}
-          <img src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image">
-        {% endif %}
+  {% for post in posts %}
+  <div class="post">
+    <div class="top">
+    <a href="user/{{post.author.id}}"><img class="post_profile_picture" src="{{ url_for('static', filename='users/uploaded_images/' + post.author.profile_pic) }}" alt="Profile Image"><p class="profile_name">{{ post.author.username }}</p></a>
+    <div class="dropdown">
+      <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton{{ post.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-vertical"></i>
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ post.id }}">
+        <a class="dropdown-item" href="#" onclick="deletePost({{ post.id }})">Delete Post</a>
+      </div>
+    </div>
+  </div>
+    {% if post.filename %}
+      <img class="post-image" src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image">
+    {% endif %}
   
-        <!-- Display the number of likes as a font awesome icon -->
-        <p class="post-likes">
-          <i class="fas fa-heart {% if current_user.has_liked_post(post) %}liked{% endif %}" onclick="likePost({{ post.id }})" id="heartIcon{{ post.id }}"></i>
-          <span id="likeCount{{ post.id }}">{{ post.likes_count }}</span>
-        </p>
-        
+    <p class="caption">{{ post.content }}</p>
   
-        <!-- Font Awesome symbol for comments -->
-        <p class="post-comments" onclick="showComments({{ post.id }})">
-          <i class="fas fa-comment"></i> {{ post.comments | length }}
-        </p>
-        <p class="post-info">Posted by {{ post.author.username }} at {{ post.created_at }}</p>
-
+    <div class="post-interactions">
+      <p class="post-likes">
+        <i class="fas fa-heart {% if not current_user.has_liked_post(post) %}heartIcon{% endif %}{% if current_user.has_liked_post(post) %}liked{% endif %}" onclick="likePost({{ post.id }})" id="heartIcon{{ post.id }}"></i>
+        <span class="likes" id="likeCount{{ post.id }}">{{ post.likes_count }}</span>
+      </p>
+      <p class="post-comments" onclick="showComments({{ post.id }})">
+        <i class="fas fa-comment CommentIcon"></i> {{ post.comments | length }}
+      </p>
+      <p class="post-info">Posted by {{ post.author.username }} on {{ post.created_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+  
+  
         <!-- Comments Modal -->
-        <div class="modal fade" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+        <div class="modal fade dark-modal" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -99,9 +110,11 @@
   
           const heartIcon = document.getElementById(`heartIcon${postId}`);
           if (data.liked) {
-            heartIcon.classList.add('liked'); // Add "liked" class if post is liked
+            heartIcon.classList.add('liked'); 
+            heartIcon.classList.remove('heartIcon');
           } else {
-            heartIcon.classList.remove('liked'); // Remove "liked" class if post is unliked
+            heartIcon.classList.remove('liked');
+            heartIcon.classList.add('heartIcon');
           }
         });
     }
@@ -109,7 +122,37 @@
     function showComments(postId) {
       $(`#commentsModal${postId}`).modal('show');
     }
+    function deletePost(postId) {
+      fetch(`/delete_post/${postId}`, { method: 'POST' })
+        .then((response) => {
+          if (response.ok) {
+            const postElement = document.querySelector(`.post[data-post-id="${postId}"]`);
+            if (postElement) {
+              postElement.remove();
+            }
+          } else {
+            console.error('Error deleting post:', response);
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting post:', error);
+        });
+    }
+
+    document.addEventListener('click', function (event) {
+      const dropdownToggle = event.target.closest('.dropdown-toggle');
+      if (dropdownToggle) {
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        if (dropdownMenu) {
+          dropdownMenu.classList.toggle('show');
+        }
+      } else {
+        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+        dropdownMenus.forEach((menu) => {
+          menu.classList.remove('show');
+        });
+      }
+    });
   </script>
-  
 {% endblock %}
 

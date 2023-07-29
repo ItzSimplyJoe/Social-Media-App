@@ -1,54 +1,174 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-md-3">
-        <img src="{{ url_for('static', filename='users/uploaded_images/' + user.profile_pic) }}" alt="Profile Picture" class="img-thumbnail">
+  <div class="user-profile__container">
+    <div class="user-profile__rows">
+      <div class="user-profile__left-column">
+        <div class="text-center">
+          <img src="{{ url_for('static', filename='users/uploaded_images/' + user.profile_pic) }}" alt="Profile Picture"
+            class="user-profile__profile-picture img-thumbnail">
+        </div>
         {% if current_user.is_authenticated and current_user.id != user.id %}
-          {% if current_user.is_following(user) %}
-          <form action="{{ url_for('unfollow', user_id=profile_user_id) }}" method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <button type="submit">Unfollow</button>
-          </form>
-        {% else %}
-          <form action="{{ url_for('follow', user_id=profile_user_id) }}" method="post">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <button type="submit">Follow</button>
-          </form>
+          <div class="text-center mt-3">
+            {% if current_user.is_following(user) %}
+              <form action="{{ url_for('unfollow', user_id=profile_user_id, page='profile') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="user-profile__follow-button btn btn-danger"><i class="fa-solid fa-user-minus"></i> Unfollow</button>
+              </form>
+            {% else %}
+              <form action="{{ url_for('follow', user_id=profile_user_id, page='profile') }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button type="submit" class="user-profile__follow-button btn btn-primary"><i class="fa-solid fa-user-plus"></i> Follow</button>
+              </form>
+            {% endif %}
+          </div>
         {% endif %}
-      {% endif %}
-      
       </div>
-      <div class="col-md-9">
+
+      <div class="user-profile__right-column">
         <h1>{{ user.username }}</h1>
-        <p>Email: {{ user.email }}</p>
+        <p class="user-profile__email"><strong>Email:</strong> {{ user.email }}</p>
         {% if user.first_name or user.last_name %}
-          <p>Name: {{ user.first_name }} {{ user.last_name }}</p>
+          <p class="user-profile__name"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
         {% endif %}
         {% if user.profession %}
-          <p>Profession: {{ user.profession }}</p>
+          <p class="user-profile__profession"><strong>Profession:</strong> {{ user.profession }}</p>
         {% endif %}
         {% if user.location %}
-          <p>Location: {{ user.location }}</p>
-        {% endif %}
-        <h3>Posts</h3>
-        {% if posts %}
-          {% for post in posts %}
-            <div class="card mb-3">
-              {% if post.filename %}
-                <img src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image" class="card-img-top">
-              {% endif %}
-              <div class="card-body">
-                <p class="card-text">{{ post.content }}</p>
-                <small class="text-muted">Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-              </div>
-            </div>
-          {% endfor %}
-        {% else %}
-          <p>No posts yet.</p>
+          <p class="user-profile__location"><strong>Location:</strong> {{ user.location }}</p>
         {% endif %}
       </div>
     </div>
   </div>
+
+  <hr>
+
+  <h3>Posts</h3>
+
+  <div class="row">
+    <div class="col-md-12">
+      {% if posts %}
+        {% for post in posts %}
+          <div class="post mb-4">
+            <div class="top">
+              <a href="user/{{ post.author.id }}">
+                <img class="post_profile_picture" src="{{ url_for('static', filename='users/uploaded_images/' + post.author.profile_pic) }}" alt="Profile Image">
+                <p class="profile_name">{{ post.author.username }}</p>
+              </a>
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton{{ post.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-vertical"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ post.id }}">
+                  <a class="dropdown-item" href="#" onclick="deletePost({{ post.id }})">Delete Post</a>
+                </div>
+              </div>
+            </div>
+            {% if post.filename %}
+              <img class="post-image" src="{{ url_for('static', filename='users/uploaded_images/' + post.filename) }}" alt="Post Image">
+            {% endif %}
+            <p class="caption">{{ post.content }}</p>
+            <div class="post-interactions">
+              <p class="post-likes">
+                <i class="fas fa-heart {% if not current_user.has_liked_post(post) %}heartIcon{% endif %}{% if current_user.has_liked_post(post) %}liked{% endif %}" onclick="likePost({{ post.id }})" id="heartIcon{{ post.id }}"></i>
+                <span class="likes" id="likeCount{{ post.id }}">{{ post.likes_count }}</span>
+              </p>
+              <p class="post-comments" onclick="showComments({{ post.id }})">
+                <i class="fas fa-comment CommentIcon"></i> {{ post.comments | length }}
+              </p>
+              <p class="post-info">Posted by {{ post.author.username }} on {{ post.created_at.strftime('%Y-%m-%d') }}</p>
+            </div>
+            <!-- Comments Modal -->
+            <div class="modal fade" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="commentsModalLabel">Comments</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="list-group">
+                      {% for comment in post.comments %}
+                        <li class="list-group-item">
+                          <strong>{{ comment.author.username }}:</strong> {{ comment.content }}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+                      <div class="form-group">
+                        <textarea name="content" class="form-control" placeholder="Write your comment here" required></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Submit Comment</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-md-12">
+          <p>No posts yet.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <script>
+    function likePost(postId) {
+      fetch(`/like_post/${postId}`, { method: 'POST' })
+        .then((response) => response.json())
+        .then((data) => {
+          const likeCountSpan = document.getElementById(`likeCount${postId}`);
+          likeCountSpan.textContent = data.likes_count;
+  
+          const heartIcon = document.getElementById(`heartIcon${postId}`);
+          if (data.liked) {
+            heartIcon.classList.add('liked'); 
+            heartIcon.classList.remove('heartIcon');
+          } else {
+            heartIcon.classList.remove('liked');
+            heartIcon.classList.add('heartIcon');
+          }
+        });
+    }
+  
+    function showComments(postId) {
+      $(`#commentsModal${postId}`).modal('show');
+    }
+    function deletePost(postId) {
+      fetch(`/delete_post/${postId}`, { method: 'POST' })
+        .then((response) => {
+          if (response.ok) {
+            const postElement = document.querySelector(`.post[data-post-id="${postId}"]`);
+            if (postElement) {
+              postElement.remove();
+            }
+          } else {
+            console.error('Error deleting post:', response);
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting post:', error);
+        });
+    }
+
+    document.addEventListener('click', function (event) {
+      const dropdownToggle = event.target.closest('.dropdown-toggle');
+      if (dropdownToggle) {
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+        if (dropdownMenu) {
+          dropdownMenu.classList.toggle('show');
+        }
+      } else {
+        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+        dropdownMenus.forEach((menu) => {
+          menu.classList.remove('show');
+        });
+      }
+    });
+  </script>
 {% endblock %}

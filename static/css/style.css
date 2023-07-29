@@ -4,8 +4,14 @@
   padding: 0;
   font-family: 'Poppins', sans-serif;
 }
-.content{
+html{
+  scroll-behavior: smooth;
   background-color: #131313;
+  overflow-x: hidden;
+}
+.contents {
+  background-color: #131313;
+  height: 100%;
 }
 .stick{
   position: sticky;
@@ -230,161 +236,672 @@ header form button:hover{
 }
 
 /* ---------------------------------------- Posts ----------------------------------------*/
-/* .post {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 0 auto;
-  max-width: 50%;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.post-info {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.post p {
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.post img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin-top: 10px;
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-
-.post:after {
-  content: "";
-  display: table;
-  clear: both;
-} */
-
-.post{
+.post {
+  position: relative;
   width: 50%;
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   background-color: #242424;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  max-height: 500px;
+  border-radius: 15px;
+  margin-top: 10px;
 }
 
-.post-info{
+.post-info {
+  float: right;
   font-size: 12px;
   color: #606060;
-  margin-bottom: 5px;
+  margin-left: 10px;
+}
+.top{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.post a{
+  text-decoration: none;
 }
 
-.post p{
-  margin: 0;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.post img{
-  max-width: 100%;
+.post-image {
+  width: 100%;
   height: auto;
-  display: block;
-  margin-top: 10px;
-  width: 200px;
-  height: 150px;
   object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  max-height: 300px;
+  max-width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #7700ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease;
 }
 
-.post:after{
-  content: "";
-  display: table;
-  clear: both;
+.post-image:hover {
+  transform: scale(1.01);
+}
+
+.caption {
+  margin-bottom: 10px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: justify;
+  text-justify: inter-word;
+  max-height: 100px;
+  position: relative;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+.profile_name{
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: justify;
+  text-justify: inter-word;
+  max-height: 100px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.profile_name:hover{
+  text-decoration: none;
+}
+
+.post_profile_picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  float: left;
+  margin-top: 5px;
+}
+.post-profile-content {
+  display: flex;
+  align-items: center;
+}
+
+.post-profile-content a {
+  display: flex;
+  align-items: center;
+}
+
+.post-interactions {
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+
+
+
+.heartIcon {
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.post-comments {
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.likes {
+  margin-right: 10px;
+  color: #fff;
 }
 
 .liked {
   color: #7700ff;
   animation: pulseAnimation 1s;
-}
-
-
-
-
-/* Style for the header and welcome message */
-h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-/* Style for the create post form */
-form {
-  margin-bottom: 20px;
-}
-
-textarea {
-  width: 100%;
-  height: 100px;
-  resize: vertical;
-}
-
-input[type="file"] {
-  margin-top: 10px;
-}
-
-input[type="submit"] {
-  margin-top: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
   cursor: pointer;
 }
 
+.dropdown {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
 
-/* style.css */
+.dropdown-toggle {
+  cursor: pointer;
+}
 
-/* Style for the "Create New Post" button */
-.btn-primary {
+.dropdown-menu {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 0;
+  min-width: 150px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.fa-ellipsis-vertical {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+
+/* ---------------------------------------- Index ----------------------------------------*/
+h1{
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 800;
+  text-decoration: none;
+}
+h2{
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.newpost-button{
+  border-radius: 50%;
+  background-color: #7700ff;
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+  border: 1px solid #7700ff;
+}
+.newpost-button i{
+  color: #fff;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.newpost-button:hover{
+  transform: translateY(-5px);
+}
+/* ---------------------------------------- Login Page ----------------------------------------*/
+.loginpage {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #222;
+}
+
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #7700ff;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #7700ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #4400aa;
+}
+
+.form-button {
+  width: 20px;
+  text-align: center;
+  color: #7700ff;
+}
+/* ---------------------------------------- Register Page ----------------------------------------*/
+
+.registerpage {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #222;
+}
+
+.register-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #7700ff;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+}
+
+.register-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #7700ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.register-button:hover {
+  background-color: #4400aa;
+}
+
+/* ---------------------------------------- Account Page ----------------------------------------*/
+.account-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
+}
+
+.form-column {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.account-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #7700ff;
+  border-radius: 5px;
+  background-color: #333; 
+  color: #fff;
+}
+
+.account-buttons {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  background-color: #7700ff;
+  cursor: pointer;
+}
+
+.account-textarea {
+  resize: vertical;
+}
+
+.account-img {
+  max-width: 100px;
+  max-height: 100px;
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  border: 2px solid #7700ff;
+  background-color: #333;
+  color: #fff;
+}
+
+
+.profile-pics{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.account-submit {
+  width: 100%;
+  padding: 10px;
+  background-color: #7700ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.account-submit:hover {
+  background-color: #4400aa;
+}
+
+.account-form::after {
+  content: "";
+  flex: auto;
+}
+
+.account-form > .form-column:last-child {
+  flex: 1 1 100%;
+}
+/* ---------------------------------------- Flash Messages ----------------------------------------*/
+
+.flash-messages{
+  position: absolute;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+.flash-message{
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  background-color: #7700ff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+/* ---------------------------------------- Search Results ----------------------------------------*/
+.searchresults_ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.searchresults_container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
   margin-bottom: 10px;
 }
 
-/* Style for the modal */
-.modal-dialog {
-  max-width: 500px; /* Set the maximum width of the modal */
+.searchresults_img {
+  max-width: 100px;
+  max-height: 100px;
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: block;
+  margin-right: 10px;
+  border-radius: 50%;
+  border: 2px solid #7700ff;
+  background-color: #333;
+  color: #fff;
 }
 
-.modal-title {
-  font-size: 24px;
+.searchresults_h2 {
+  flex: 1;
 }
 
-.modal-body {
+.searchresults_li {
+  margin-bottom: 10px;
+}
+
+.searchresults_a {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #7700ff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+.searchresults_a:hover {
+  background-color: #4400aa;
+  color: #fff;
+  text-decoration: none;
+}
+
+.searchresults_p {
+  margin-bottom: 0;
+  max-width: 75%;
+}
+
+.toprow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottomrow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.follow_button{
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #7700ff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.follow_button:hover {
+  background-color: #4400aa;
+  color: #fff;
+  text-decoration: none;
+}
+/* ---------------------------------------- User Profiles ----------------------------------------*/
+.userprofile_container {
+  max-width: 90%;
+  margin: 0 auto;
   padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
+  margin-bottom: 10px;
 }
 
-.modal-footer {
-  padding: 10px 20px;
+.user-profile__rows {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Style for the form elements inside the modal */
-.form-group {
-  margin-bottom: 20px;
+.user-profile__left-column {
+  margin-right: 5%;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
 }
 
-label {
-  font-weight: bold;
+.user-profile__right_column {
+  width: 40%;
 }
 
-/* Remove margin/padding for the close button in the modal header */
-.modal-header .close {
-  margin: 0;
-  padding: 0;
+.user-profile__profile-picture {
+  max-width: 100%;
+  max-height: 100%;
+  width: 250px;
+  height: 250px;
+  margin-top: 10px;
+  border-radius: 50%;
+  border: 2px solid #7700ff;
+  background-color: #333;
 }
+
+.user-profile__a,
+.user-profile__follow_button {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #7700ff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.user-profile__a:hover,
+.user-profile__follow_button:hover {
+  background-color: #4400aa;
+  color: #fff;
+  text-decoration: none;
+}
+
+.user-profile__p {
+  margin-bottom: 0;
+  max-width: 75%;
+}
+h3{
+  color: #7700ff;
+  background-image: linear-gradient(to right, #7700ff 30%, #001eff 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  text-decoration: none;
+  text-align: center;
+}
+.user-profile__email,
+.user-profile__username,
+.user-profile__name,
+.user-profile__bio,
+.user-profile__profession,
+.user-profile__location {
+  color: #fff;
+}
+
+
+/* ---------------------------------------- Modals ----------------------------------------*/
+
+.modal.fade.dark-modal .modal-content {
+  background-color: #333;
+  color: #fff;
+}
+
+.modal.fade.dark-modal .modal-header {
+  background-color: #555;
+  border-bottom: 1px solid #888;
+}
+
+.modal.fade.dark-modal .modal-title {
+  color: #fff;
+}
+
+.modal.fade.dark-modal .close {
+  color: #fff;
+}
+
+.modal.fade.dark-modal .modal-body {
+  /* Customize modal body styles if needed */
+}
+
+.modal.fade.dark-modal .list-group-item {
+  background-color: #444;
+  border-color: #666;
+  color: #fff;
+}
+
+.modal.fade.dark-modal .list-group-item strong {
+  color: #7700ff;
+}
+
+.modal.fade.dark-modal .modal-footer {
+  background-color: #555;
+  border-top: 1px solid #888;
+}
+
+.modal.fade.dark-modal .form-control {
+  background-color: #555;
+  color: #fff;
+}
+
+.modal.fade.dark-modal .btn-primary {
+  background-color: #7700ff;
+  border-color: #7700ff;
+  transition: all 0.5s ease;
+}
+
+.modal.fade.dark-modal .btn-primary:hover {
+  background-color: #9131ff;
+  border-color: #9131ff;
+}
+
+.modal.fade.dark-modal .modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal.fade.dark-modal .modal-body::-webkit-scrollbar-thumb {
+  background-color: #666;
+}
+
+.modal.fade.dark-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}
+
 
 
 /* animations */

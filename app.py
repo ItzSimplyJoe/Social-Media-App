@@ -40,8 +40,9 @@ class Comment(db.Model):
 class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=False)
     liked_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class Follow(db.Model):
     __tablename__ = 'followers'
@@ -53,16 +54,29 @@ class Follow(db.Model):
 
     __table_args__ = {'extend_existing': True}
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    # Define the relationships with the User model
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    recipient = db.relationship('User', foreign_keys=[recipient_id], backref='received_messages')
+
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    first_name = db.Column(db.String(50))
-    last_name = db.Column(db.String(50))
-    profession = db.Column(db.String(100))
-    location = db.Column(db.String(100))
+    first_name = db.Column(db.String(50), default="Per")
+    last_name = db.Column(db.String(50), default="Son")
+    profession = db.Column(db.String(100), default="Person")
+    location = db.Column(db.String(100), default="Earth")
+    bio = db.Column(db.Text, default="Hello there...")
     profile_pic = db.Column(db.String(100), default='default.jpg')
     posts = db.relationship('Post', backref='author', lazy=True)
 
@@ -253,15 +267,15 @@ def delete_post(post_id):
         db.session.commit()
     return redirect(url_for('index'))
 
+
 @app.route('/follow/<int:user_id>', methods=['POST'])
 @login_required
-def follow(user_id):
+def follow(user_id, page):
     user_to_follow = User.query.get(user_id)
     if user_to_follow is None:
         flash('User not found.', 'error')
         return redirect(url_for('explore'))
 
-    # Check if the follow relationship already exists
     if current_user.is_following(user_to_follow):
         flash('You are already following this user.', 'info')
         return redirect(url_for('view_profile', user_id=user_id))
@@ -274,12 +288,17 @@ def follow(user_id):
         return redirect(url_for('view_profile', user_id=user_id))
 
     flash(f"You are now following {user_to_follow.username}.", 'success')
-    return redirect(url_for('view_profile', user_id=user_id))
+    if page == 'profile':
+        return redirect(url_for('view_profile', user_id=user_id))
+    elif page == 'search':
+        return redirect(url_for('search_results', query=request.form['query']))
+    else:
+        return redirect(url_for('view_profile', user_id=user_id))
 
 
 @app.route('/unfollow/<int:user_id>', methods=['POST'])
 @login_required
-def unfollow(user_id):
+def unfollow(user_id, page):
     user_to_unfollow = User.query.get(user_id)
     if user_to_unfollow is None:
         flash('User not found.', 'danger')
@@ -290,8 +309,12 @@ def unfollow(user_id):
         flash('You have unfollowed {}.'.format(user_to_unfollow.username), 'success')
     else:
         flash('You are not following this user.', 'info')
-
-    return redirect(url_for('view_profile', user_id=user_id))
+    if page == 'profile':
+        return redirect(url_for('view_profile', user_id=user_id))
+    elif page == 'search':
+        return redirect(url_for('search_results', query=request.form['query']))
+    else:
+        return redirect(url_for('view_profile', user_id=user_id))
 
 
 @app.route('/account', methods=['GET', 'POST'])
@@ -311,7 +334,11 @@ def account():
             filename = str(uuid.uuid4()) + secure_filename(profile_picture.filename)
             profile_picture.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            current_user.profile_picture = filename
+            if current_user.profile_pic is not None and current_user.profile_pic != 'default.jpg':
+                old_profile_picture_path = os.path.join(app.config['UPLOAD_FOLDER'], current_user.profile_pic)
+                os.remove(old_profile_picture_path)
+
+            current_user.profile_pic = filename
 
         new_password = request.form['new_password']
         if new_password:
@@ -327,7 +354,8 @@ def account():
 def search_user():
     search_query = request.args.get('search_query', '')
     users = User.query.filter(User.username.ilike(f'%{search_query}%')).all()
-    return render_template('search_results.html', users=users)
+    csrf_token = generate_csrf()  # Generate CSRF token
+    return render_template('search_results.html', users=users, csrf_token=csrf_token)
 
 @app.route('/user/<int:user_id>')
 @login_required
@@ -383,8 +411,76 @@ def like_post(post_id):
 @app.route('/messages')
 @login_required
 def messages():
-    print("Hello")
-    return render_template('messages.html')
+    messages = Message.query.filter(or_(
+        Message.sender_id == current_user.id,
+        Message.recipient_id == current_user.id
+    )).order_by(Message.timestamp.desc()).all()
+    return render_template('messages.html', messages=messages)
+
+@app.route('/send_message', methods=['POST'])
+@login_required
+def send_message():
+    recipient_username = request.form['recipient_username']
+    message_content = request.form['message_content']
+
+    recipient = User.query.filter_by(username=recipient_username).first()
+    if not recipient:
+        flash('Recipient not found.', 'error')
+        return redirect(url_for('conversations'))
+
+    new_message = Message(sender_id=current_user.id, recipient_id=recipient.id, content=message_content)
+    db.session.add(new_message)
+    db.session.commit()
+
+    flash('Message sent successfully!', 'success')
+    return redirect(url_for('conversation', recipient_id=recipient.id))
+
+
+@app.route('/conversations')
+@login_required
+def conversations():
+    conversations = db.session.query(User).join(
+        Message, or_(
+            and_(Message.sender_id == current_user.id, Message.recipient_id == User.id),
+            and_(Message.sender_id == User.id, Message.recipient_id == current_user.id)
+        )
+    ).distinct(User.id).all()
+
+    return render_template('conversations.html', conversations=conversations)
+
+@app.route('/new_conversation', methods=['GET'])
+@login_required
+def new_conversation():
+    return render_template('new_conversation.html')
+
+
+
+@app.route('/conversation/<int:recipient_id>', methods=['GET', 'POST'])
+@login_required
+def conversation(recipient_id):
+    recipient = User.query.get(recipient_id)
+    if not recipient:
+        flash('Recipient not found.', 'error')
+        return redirect(url_for('conversations'))
+
+    if request.method == 'POST':
+        message_content = request.form['message_content']
+
+        new_message = Message(sender_id=current_user.id, recipient_id=recipient.id, content=message_content)
+        db.session.add(new_message)
+        db.session.commit()
+
+        flash('Message sent successfully!', 'success')
+        return redirect(url_for('conversation', recipient_id=recipient_id))
+
+    messages = Message.query.filter(or_(
+        and_(Message.sender_id == current_user.id, Message.recipient_id == recipient_id),
+        and_(Message.sender_id == recipient_id, Message.recipient_id == current_user.id)
+    )).order_by(Message.timestamp).all()
+
+    return render_template('conversation.html', recipient=recipient, messages=messages)
+
+
 
 if __name__ == '__main__':
     with app.app_context():

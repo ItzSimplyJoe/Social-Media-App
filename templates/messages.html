@@ -1,5 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    hi
+  <h1>Messages</h1>
+  <ul class="message-list">
+    {% for message in messages %}
+      <li>
+        <p>From: {{ message.sender.username }}</p>
+        <p>To: {{ message.recipient.username }}</p>
+        <p>{{ message.content }}</p>
+        <p>Timestamp: {{ message.timestamp }}</p>
+      </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

@@ -1,38 +1,64 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Account</h1>
-  <form action="{{ url_for('account') }}" method="post" enctype="multipart/form-data">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" value="{{ current_user.username }}" required>
+<h1>Account</h1>
+  <form class="account-form" action="{{ url_for('account') }}" method="post" enctype="multipart/form-data">
+    <div class="form-column">
+  
+      <label for="username"><i class="fa-solid fa-at form-button"></i> Username:</label>
+      <input class="account-input" type="text" id="username" name="username" value="{{ current_user.username }}" required>
+  
+      <label for="email"><i class="fa-solid fa-envelope form-button"></i>  Email:</label>
+      <input class="account-input" type="email" id="email" name="email" value="{{ current_user.email }}" required>
+  
+      <label for="first_name"><i class="fa-solid fa-signature form-button"></i> First Name:</label>
+      <input class="account-input" type="text" id="first_name" name="first_name" value="{{ current_user.first_name }}">
+  
+      <label for="last_name"><i class="fa-solid fa-signature form-button"></i> Last Name:</label>
+      <input class="account-input" type="text" id="last_name" name="last_name" value="{{ current_user.last_name }}">
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="{{ current_user.email }}" required>
-
-    <label for="first_name">First Name:</label>
-    <input type="text" id="first_name" name="first_name" value="{{ current_user.first_name }}">
-
-    <label for="last_name">Last Name:</label>
-    <input type="text" id="last_name" name="last_name" value="{{ current_user.last_name }}">
-
-    <label for="bio">Bio:</label>
-    <textarea id="bio" name="bio">{{ current_user.bio }}</textarea>
-
-    <label for="location">Location:</label>
-    <input type="text" id="location" name="location" value="{{ current_user.location }}">
-
-    <label for="profession">Profession:</label>
-    <input type="text" id="profession" name="profession" value="{{ current_user.profession }}">
-
-    <label for="profile_picture">Profile Picture:</label>
-    <input type="file" id="profile_picture" name="profile_picture">
-    {% if current_user.profile_picture %}
-      <img src="{{ url_for('static', filename='users/uploaded_images/' + current_user.profile_picture) }}" alt="Profile Picture">
-    {% endif %}
-
-    <label for="new_password">New Password:</label>
-    <input type="password" id="new_password" name="new_password">
-
-    <input type="submit" value="Update Profile">
+      <label for="new_password"><i class="fa-solid fa-lock form-button"> </i>New Password:</label>
+      <input class="account-input" type="password" id="new_password" name="new_password">
+    </div>
+  
+    <div class="form-column">
+      <label for="profile_picture"><i class="fa-solid fa-camera form-button"></i> Profile Picture:</label>
+      <div class="profile-pics">
+        {% if current_user.profile_pic %}
+          <img id="profilePicture" class="account-img" src="{{ url_for('static', filename='users/uploaded_images/' + current_user.profile_pic) }}" alt="Profile Picture">
+        {% else %}
+          <img id="profilePicture" class="account-img" src="{{ url_for('static', filename='users/uploaded_images/default.jpg') }}" alt="Profile Picture">
+        {% endif %}
+        <input class="account-buttons" type="file" id="profile_picture" name="profile_picture" onchange="previewProfilePicture(event)">
+      </div>
+      <label for="bio"><i class="fa-solid fa-circle-info form-button"></i> Bio:</label>
+      <textarea class="account-input account-textarea" id="bio" name="bio">{{ current_user.bio }}</textarea>
+  
+      <label for="location"><i class="fa-solid fa-location-dot form-button"></i> Location:</label>
+      <input class="account-input" type="text" id="location" name="location" value="{{ current_user.location }}">
+  
+      <label for="profession"><i class="fa-solid fa-user-tie form-button"></i> Profession:</label>
+      <input class="account-input" type="text" id="profession" name="profession" value="{{ current_user.profession }}">
+  
+      <input class="account-submit" type="submit" value="Update Profile">
+    </div>
   </form>
+  <script>
+    // Function to update the profile picture preview
+    function previewProfilePicture(event) {
+      const fileInput = event.target;
+      const profilePicture = document.getElementById('profilePicture');
+  
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+  
+        reader.onload = function (e) {
+          profilePicture.src = e.target.result;
+        };
+  
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    }
+  </script>
+  
 {% endblock %}

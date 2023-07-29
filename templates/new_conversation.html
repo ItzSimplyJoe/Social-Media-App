@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Start a New Conversation</h1>
+  <form action="{{ url_for('send_message') }}" method="post">
+    <label for="recipient_username">Recipient's Username:</label>
+    <input type="text" id="recipient_username" name="recipient_username" required>
+    <label for="message_content">Message:</label>
+    <textarea id="message_content" name="message_content" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+{% endblock %}

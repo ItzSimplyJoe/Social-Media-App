@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Manage Conversations</h1>
+  <ul class="conversation-list">
+    {% for user in conversations %}
+      <li>
+        <a href="{{ url_for('conversation', recipient_id=user.id) }}">{{ user.username }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="{{ url_for('new_conversation') }}" class="btn btn-primary">Start a New Conversation</a>
+{% endblock %}

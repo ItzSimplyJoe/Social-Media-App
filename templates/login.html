@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>Login</h1>
-    <form action="{{ url_for('login') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <input type="submit" value="Login">
+    <form class = "loginpage" action="{{ url_for('login') }}" method="post">
+        <label for="username"><i class="fa-solid fa-at form-button"></i> Username:</label>
+        <input class = "login-input" type="text" id="username" name="username" placeholder="username...">
+        <label for="password"><i class="fa-solid fa-lock form-button"></i> Password:</label>
+        <input class = "login-input" type="password" id="password" name="password" placeholder="password..." required>
+        <input class = "login-button" type="submit" value="Login">
     </form>
 {% endblock %}

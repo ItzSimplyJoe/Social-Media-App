@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h1>Conversation with {{ recipient.username }}</h1>
+  <div class="message-list">
+    {% for message in messages %}
+      <div class="message">
+        <p>From: {{ message.sender.username }}</p>
+        <p>{{ message.content }}</p>
+        <p>Time: {{ message.timestamp }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  <form action="{{ url_for('conversation', recipient_id=recipient.id) }}" method="post">
+    <textarea name="message_content" placeholder="Message" required></textarea>
+    <input type="submit" value="Send Message">
+  </form>
+{% endblock %}
