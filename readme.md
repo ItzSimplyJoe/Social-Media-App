@@ -15,7 +15,7 @@ If you want to run the program and change it for yourself then
 ```cd social_network```
 ```pip install -r requirements.txt```
 ```python app.py```
-
+<div align="center">
 ## What it can do
 ### Register Page
 <p>Create an Account with the easy-to-follow and easy-to-understand Register Page</p>
@@ -44,7 +44,7 @@ If you want to run the program and change it for yourself then
 <p>Search for other users on the Search Page</p>
 <img src="Images_for_Github/User_search.png" width=320 height=180>
 <img src="Images_for_Github/profile.png" width=320 height=180>
-
+</div>
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
