@@ -1,9 +1,7 @@
 # Flask Social Media App
 
-[![License](https://img.shields.io/github/license/ItzSimplyJoe/Social-Media-App)](https://choosealicense.com/licenses/mit/)
 [![Repo Size](https://img.shields.io/github/repo-size/ItzSimplyJoe/Social-Media-App)]()
 [![Code Size](https://img.shields.io/github/languages/code-size/ItzSimplyJoe/Social-Media-App)]()
-[![Lines of Code](https://img.shields.io/tokei/lines/github/ItzSimplyJoe/Social-Media-App)]()
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ItzSimplyJoe/Social-Media-App)]()
 [![GitHub Issues](https://img.shields.io/github/issues/ItzSimplyJoe/Social-Media-App)]()
 
