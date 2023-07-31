@@ -19,31 +19,31 @@ If you want to run the program and change it for yourself then
 ## What it can do
 ### Register Page
 <p>Create an Account with the easy-to-follow and easy-to-understand Register Page</p>
-<img src="Images_for_Github/register.png" width=100 height=100>
+<img src="Images_for_Github/register.png" width=320 height=180>
 
 ### Login Page
 <p>Log into your account with the Login Page</p>
-<img src="Images_for_Github/login.png" width=100 height=100>
+<img src="Images_for_Github/login.png" width=320 height=180>
 
 ### Home Page
 <p>See all the posts from the people you follow on the Home Page</p>
 <p>Here you can also create your own posts by clicking the + button in the bottom right corner</p>
-<img src="Images_for_Github/index.png" width=100 height=100>
+<img src="Images_for_Github/index.png" width=320 height=180>
 
 ### Account Settings Page
 <p>Change your account settings on the Account Settings Page</p>
-<img src="Images_for_Github/account.png" width=100 height=100>
+<img src="Images_for_Github/account.png" width=320 height=180>
 
 ### Messages Page
 <p>Send messages to other users on the Messages Page</p>
-<img src="Images_for_Github/conversations.png" width=100 height=100>
-<img src="Images_for_Github/convesation.png" width=100 height=100>
-<img src="Images_for_Github/new_convesation.png" width=100 height=100>
+<img src="Images_for_Github/Conversations.png" width=320 height=180>
+<img src="Images_for_Github/conversation.png" width=320 height=180>
+<img src="Images_for_Github/new_conversation.png" width=320 height=180>
 
 ### Search For other Users Page
 <p>Search for other users on the Search Page</p>
-<img src="Images_for_Github/user_search.png" width=100 height=100>
-<img src="Images_for_Github/profile.png" width=100 height=100>
+<img src="Images_for_Github/User_search.png" width=320 height=180>
+<img src="Images_for_Github/profile.png" width=320 height=180>
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
