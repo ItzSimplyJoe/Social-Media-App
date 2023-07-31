@@ -3,7 +3,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Register</h1>
+    <h1 class="title">Register</h1>
     <form class = "registerpage" action="{{ url_for('register') }}" method="post">
         <label for="email"><i class="fa-solid fa-envelope form-button"></i> Email:</label>
         <input class = "register-input" type="email" id="email" name="email" required>

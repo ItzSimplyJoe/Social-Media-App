@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1>Login</h1>
+    <h1 class="title">Login</h1>
     <form class = "loginpage" action="{{ url_for('login') }}" method="post">
         <label for="username"><i class="fa-solid fa-at form-button"></i> Username:</label>
         <input class = "login-input" type="text" id="username" name="username" placeholder="username...">

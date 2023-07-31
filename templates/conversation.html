@@ -1,18 +1,22 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Conversation with {{ recipient.username }}</h1>
-  <div class="message-list">
+  <h1 class="title">Conversation with {{ recipient.username }}</h1>
+  <div class="conversation__container">
+  <div class="conversation__messages">
     {% for message in messages %}
-      <div class="message">
-        <p>From: {{ message.sender.username }}</p>
-        <p>{{ message.content }}</p>
-        <p>Time: {{ message.timestamp }}</p>
+      <div class="conversation__message">
+        <div class="conversation__message__top__row"><img class="post_profile_picture" src="{{ url_for('static', filename='users/uploaded_images/' + message.sender.profile_pic) }}" alt="Profile Image"><p class="profile_name">{{ message.sender.username }}</p></div>
+        <p class="conversation__content">{{ message.content }}</p>
+        <p class="conversation__message__info">Time: {{ message.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
       </div>
     {% endfor %}
   </div>
   <form action="{{ url_for('conversation', recipient_id=recipient.id) }}" method="post">
-    <textarea name="message_content" placeholder="Message" required></textarea>
-    <input type="submit" value="Send Message">
+    <div class="conversation__send__message">
+      <textarea class="conversation__message__box" name="message_content" placeholder="Message" required></textarea>
+      <input class="conversation__message__button" type="submit" value="Send Message">
+    </div>
   </form>
+</div>
 {% endblock %}

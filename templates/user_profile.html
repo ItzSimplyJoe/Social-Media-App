@@ -26,7 +26,7 @@
       </div>
 
       <div class="user-profile__right-column">
-        <h1>{{ user.username }}</h1>
+        <h1 class="title">{{ user.username }}</h1>
         <p class="user-profile__email"><strong>Email:</strong> {{ user.email }}</p>
         {% if user.first_name or user.last_name %}
           <p class="user-profile__name"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>

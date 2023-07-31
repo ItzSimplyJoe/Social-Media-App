@@ -146,7 +146,7 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     filename = db.Column(db.String(100))
-    comments = db.relationship('Comment', backref='post', lazy=True)
+    comments = db.relationship('Comment', backref='post', lazy=True, cascade='all, delete-orphan')
     likes = db.relationship('Like', backref='post', lazy=True)
     @property
     def likes_count(self):
@@ -211,7 +211,6 @@ def register():
             flash('Email address already registered. Please use a different email.', 'error')
             return render_template('register.html')
 
-        # If everything is valid, create the new user
         hashed_password = generate_password_hash(password, method='scrypt')
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
@@ -232,7 +231,7 @@ def login():
             login_user(user)
             return redirect(url_for('index'))
         else:
-            flash('Invalid username or password.', 'error')
+            flash('Invalid username or password. Fields are case sensitive.', 'error')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -266,6 +265,7 @@ def delete_post(post_id):
         db.session.delete(post)
         db.session.commit()
     return redirect(url_for('index'))
+
 
 
 @app.route('/follow/<int:user_id>', methods=['POST'])
@@ -408,14 +408,6 @@ def like_post(post_id):
     response_data = {'likes_count': likes_count, 'liked': liked}
     return jsonify(response_data)
 
-@app.route('/messages')
-@login_required
-def messages():
-    messages = Message.query.filter(or_(
-        Message.sender_id == current_user.id,
-        Message.recipient_id == current_user.id
-    )).order_by(Message.timestamp.desc()).all()
-    return render_template('messages.html', messages=messages)
 
 @app.route('/send_message', methods=['POST'])
 @login_required

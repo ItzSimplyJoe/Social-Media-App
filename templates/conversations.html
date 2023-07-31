@@ -1,13 +1,28 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Manage Conversations</h1>
-  <ul class="conversation-list">
-    {% for user in conversations %}
-      <li>
-        <a href="{{ url_for('conversation', recipient_id=user.id) }}">{{ user.username }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-  <a href="{{ url_for('new_conversation') }}" class="btn btn-primary">Start a New Conversation</a>
+<div class="ablankgap"></div>
+<div class="conversations__container">
+  <h1 class="title">Private Messages</h1>
+  <div class="conversations__new">
+    <a class="conversations__new__button" href="{{ url_for('new_conversation') }}">Start a New Conversation</a>
+  </div>
+  <div class="conversations__list">
+    <ul class="conversations__ul">
+      {% for user in conversations %}
+        <li class="conversations__li">
+          <a class="conversations__user__box" href="{{ url_for('conversation', recipient_id=user.id) }}">
+            <img class="conversations__user__image" src="{{ url_for('static', filename='users/uploaded_images/' + user.profile_pic) }}" alt="User Image">
+            <div class="conversations__name_and_icon">
+              <p class="conversations__username">{{ user.username }}</p>
+              <div class="circle">
+                <i class="fa-solid fa-arrow-up-right-from-square inner_circle_icon"></i>
+              </div>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 {% endblock %}
