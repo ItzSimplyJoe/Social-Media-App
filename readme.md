@@ -16,6 +16,7 @@ If you want to run the program and change it for yourself then
 ```pip install -r requirements.txt```
 ```python app.py```
 <div align="center">
+
 ## What it can do
 ### Register Page
 <p>Create an Account with the easy-to-follow and easy-to-understand Register Page</p>
