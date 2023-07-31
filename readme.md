@@ -46,11 +46,15 @@ If you want to run the program and change it for yourself then
 <img src="Images_for_Github/User_search.png" width=640 height=360>
 <img src="Images_for_Github/profile.png" width=640 height=360>
 </div>
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Contact
 If you want to contact me you can reach me at [my email](mailto:joebostock30@gmail.com) or [my website](https://www.itzsimplyjoe.me).
+
+## Contributing
+If you want to contribute to this project you can by making a Pull Request.
 
 ## Acknowledgements
 - [Python](https://www.python.org/)
