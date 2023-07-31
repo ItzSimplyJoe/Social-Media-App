@@ -6,6 +6,7 @@
   <button type="button" title="New Post" class="newpost-button" data-toggle="modal" data-target="#createPostModal">
     <i class="fa-solid fa-plus"></i>
   </button>
+  <!-- Modals -->
   <div class="modal fade dark-modal" id="createPostModal" tabindex="-1" role="dialog" aria-labelledby="createPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -64,94 +65,42 @@
       </p>
       <p class="post-info">Posted by {{ post.author.username }} on {{ post.created_at.strftime('%Y-%m-%d') }}</p>
     </div>
-  
-  
-        <div class="modal fade dark-modal" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="commentsModalLabel">Comments</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+    <div class="modal fade dark-modal" id="commentsModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="commentsModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="commentsModalLabel">Comments</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group">
+              {% for comment in post.comments %}
+                <li class="list-group-item">
+                  <strong>{{ comment.author.username }}:</strong> {{ comment.content }}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+              <div class="form-group">
+                <textarea name="content" class="form-control" placeholder="Write your comment here" required></textarea>
               </div>
-              <div class="modal-body">
-                <ul class="list-group">
-                  {% for comment in post.comments %}
-                    <li class="list-group-item">
-                      <strong>{{ comment.author.username }}:</strong> {{ comment.content }}
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-              <div class="modal-footer">
-                <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
-                  <div class="form-group">
-                    <textarea name="content" class="form-control" placeholder="Write your comment here" required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Submit Comment</button>
-                </form>
-              </div>
-            </div>
+              <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </form>
           </div>
         </div>
-  
       </div>
+    </div>
+      </div>
+
   {% endfor %}
-
-  <script>
-    function likePost(postId) {
-      fetch(`/like_post/${postId}`, { method: 'POST' })
-        .then((response) => response.json())
-        .then((data) => {
-          const likeCountSpan = document.getElementById(`likeCount${postId}`);
-          likeCountSpan.textContent = data.likes_count;
-  
-          const heartIcon = document.getElementById(`heartIcon${postId}`);
-          if (data.liked) {
-            heartIcon.classList.add('liked'); 
-            heartIcon.classList.remove('heartIcon');
-          } else {
-            heartIcon.classList.remove('liked');
-            heartIcon.classList.add('heartIcon');
-          }
-        });
-    }
-  
-    function showComments(postId) {
-      $(`#commentsModal${postId}`).modal('show');
-    }
-    function deletePost(postId) {
-      fetch(`/delete_post/${postId}`, { method: 'POST' })
-        .then((response) => {
-          if (response.ok) {
-            const postElement = document.querySelector(`.post[data-post-id="${postId}"]`);
-            if (postElement) {
-              postElement.remove();
-            }
-          } else {
-            console.error('Error deleting post:', response);
-          }
-        })
-        .catch((error) => {
-          console.error('Error deleting post:', error);
-        });
-    }
-
-    document.addEventListener('click', function (event) {
-      const dropdownToggle = event.target.closest('.dropdown-toggle');
-      if (dropdownToggle) {
-        const dropdownMenu = dropdownToggle.nextElementSibling;
-        if (dropdownMenu) {
-          dropdownMenu.classList.toggle('show');
-        }
-      } else {
-        const dropdownMenus = document.querySelectorAll('.dropdown-menu');
-        dropdownMenus.forEach((menu) => {
-          menu.classList.remove('show');
-        });
-      }
-    });
-  </script>
+  <script src="{{ url_for('static', filename='js/editPost.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/deletePost.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/likePost.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/showComments.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dropdown.js') }}"></script>
 {% endblock %}
 
