@@ -11,10 +11,10 @@ A simple social media app called Simplz made with Flask, HTML, CSS and JS.
 
 ## Installation
 If you want to run the program and change it for yourself then
-```git clone https://github.com/ItzSimplyJoe/Social-Media-App.git```
-```cd social_network```
-```pip install -r requirements.txt```
-```python app.py```
+- `git clone https://github.com/ItzSimplyJoe/Social-Media-App.git`
+- `cd social_network`
+- `pip install -r requirements.txt`
+- `python app.py`
 <div align="center">
 
 ## What it can do
