@@ -25,7 +25,7 @@ followers = db.Table(
     'followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    extend_existing=True  # Add this option to reuse the existing table definition
+    extend_existing=True
 )
 
 class Comment(db.Model):
@@ -60,8 +60,6 @@ class Message(db.Model):
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-    # Define the relationships with the User model
     sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
     recipient = db.relationship('User', foreign_keys=[recipient_id], backref='received_messages')
 
@@ -87,7 +85,7 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers_of', lazy='dynamic'),
         lazy='dynamic',
-        overlaps="follower,followers_of,following,following_list"  # Add 'overlaps' parameter
+        overlaps="follower,followers_of,following,following_list"
     )
 
     followers_list = db.relationship(
@@ -97,7 +95,7 @@ class User(UserMixin, db.Model):
         secondaryjoin=(followers.c.follower_id == id),
         backref=db.backref('following_by', lazy='dynamic'),
         lazy='dynamic',
-        overlaps="followed,followers,followers_of,following_list"  # Add 'overlaps' parameter
+        overlaps="followed,followers,followers_of,following_list"
     )
 
     def is_following(self, user):
@@ -366,21 +364,17 @@ def view_profile(user_id):
         return redirect(url_for('search_user'))
 
     posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
-    csrf_token = generate_csrf()  # Generate CSRF token
+    csrf_token = generate_csrf()
     return render_template('user_profile.html', user=user, posts=posts, csrf_token=csrf_token, profile_user_id=user_id)
 
 @app.route('/add_comment/<int:post_id>', methods=['POST'])
 @login_required
 def add_comment(post_id):
     content = request.form['content']
-
-    # Find the post to which the comment is being added
     post = Post.query.get(post_id)
     if not post:
         flash('Post not found.', 'error')
         return redirect(url_for('index'))
-
-    # Create the comment and add it to the database
     current_user.add_comment(post, content)
 
     flash('Comment added successfully.', 'success')
@@ -403,7 +397,6 @@ def like_post(post_id):
         db.session.commit()
         liked = True
 
-    # Return JSON response with the updated likes count and liked status
     likes_count = post.likes_count
     response_data = {'likes_count': likes_count, 'liked': liked}
     return jsonify(response_data)

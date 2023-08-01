@@ -18,6 +18,9 @@ html{
   top: 0;
   z-index: 999;
 }
+.page{
+  background-color: #131313;
+}
 /* ---------------------------------------- nav bar ----------------------------------------*/
 .navbar{
   background: #131313;
@@ -1186,6 +1189,106 @@ h3{
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+/* ---------------------------------------- Animations ----------------------------------------*/
+
+.footer{
+  margin-top: 150px;
+  background-color: #242424;
+  color: #fff;
+  padding: 80px 0;
+}
+.footer__container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.footer__links{
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+}
+.footer__link--wrapper{
+  display: flex;
+}
+.footer__link--items{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 16px;
+  text-align: left;
+  width: 160px;
+  box-sizing: border-box;
+}
+.footer__link--items h2{
+  margin-bottom: 16px;
+}
+.footer__link--items > h2{
+  color: #fff;
+}
+.footer__link--items a{
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+.footer__link--items a:hover{
+  color: #7700ff;
+  transition: 0.3s ease-out;
+  text-decoration: none;
+}
+.footer__logo{
+  display: flex;
+  align-items: center;
+  justify-self: flex-start;
+  margin-bottom: 16px;
+}
+.footer__logo > img{
+  margin-right: 10px;
+}
+.social__media{
+  max-width: 1000px;
+  width: 100%;
+}
+.social__media--wrap{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto 0 auto;
+}
+.social__logo{
+  color: #fff;
+  justify-self: start;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+.social__logo > img{
+  margin-right: 10px;
+}
+.website__rights{
+  color: #fff;
+  margin-bottom: 16px;
+}
+.social__icons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 240px;
+}
+.social__icon--link{
+  color: #fff;
+  font-size: 24px;
 }
 /* ---------------------------------------- Animations ----------------------------------------*/
 
