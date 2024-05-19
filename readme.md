@@ -51,7 +51,7 @@ If you want to run the program and change it for yourself then
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Contact
-If you want to contact me you can reach me at [my email](mailto:joebostock30@gmail.com) or [my website](https://www.itzsimplyjoe.me).
+If you want to contact me you can reach me at [my email](mailto:joebostock30@gmail.com) or [my website](https://www.joebostock.com).
 
 ## Contributing
 If you want to contribute to this project you can by making a Pull Request.
